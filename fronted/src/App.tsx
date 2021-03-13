@@ -1,14 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Header } from './components/molecules/header';
-import { OneBoard } from './components/molecules/oneboard';
+import { Boards } from './components/molecules/boards';
+
+const boardContents = [
+  {id:1, name:"Todo", position:1 },
+  {id:2, name:"Doing", position:2},
+  {id:3, name:"Done", position:3 },
+]
 
 function App() {
   return (
     <div className="App">
       <Header title="today-todo!" />
-      <OneBoard name="todo" />
+      <Boards boards={boardContents} />
     </div>
   );
 }

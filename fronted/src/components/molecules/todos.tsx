@@ -1,22 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Modal from '@material-ui/core';
+import {TodoWrapper} from './todoWrapper';
 
 const {useState} = React;
 
 const AllTodo = styled.div`
-
+    podding:50px;
 `;
-
-const TodoArea = styled.div`
-    background: #fff;
-`;
-
-const TodoTitle = styled.p`
-
-`;
-
-
 
 export type TodoType = {
     id: number;
@@ -32,11 +22,8 @@ interface Props {
 
 
 export const Todos:React.FC<Props> = (props: Props) =>{
-    const [madalOpen, setModalOpen] = useState(false);
+    const [dialogOpen] = useState(false);
 
-    const handleOpen = () =>{
-        setModalOpen(true);
-    }
     const { todoList } = props;
     const sortedTodoList:TodoType[] = todoList.sort((n1, n2) => {
         if(n1.position > n2.position){
@@ -50,9 +37,11 @@ export const Todos:React.FC<Props> = (props: Props) =>{
 
     const todoListElement = sortedTodoList.map((todoList)=>{
         return(
-            <TodoArea key={todoList.id} >
-                <TodoTitle>{todoList.title}</TodoTitle>
-            </TodoArea>
+            <TodoWrapper 
+                todo={todoList}
+                isOpen={dialogOpen}
+                onClose={() =>{}}
+            />
         )
     });
 

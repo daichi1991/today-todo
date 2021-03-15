@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import {DialogContent, Dialog, DialogTitle} from '@material-ui/core';
-import {TodoType} from './todos';
+import {TodoType} from './types';
 
 const DialogWrapper = styled.div`
     width:50vw;

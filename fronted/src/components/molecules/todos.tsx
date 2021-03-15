@@ -1,6 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {TodoWrapper} from './todoWrapper';
+import type { TodoType } from './types'
+import { getItemStyle, getListStyle } from './styles'
 
 const {useState} = React;
 
@@ -8,47 +11,57 @@ const AllTodo = styled.div`
     podding:50px;
 `;
 
-export type TodoType = {
-    id: number;
-    title: string;
-    memo: string;
-    position: number;
-    board_id: number;
-}
 
 interface Props {
-    todoList: TodoType[];
+    todos: TodoType[];
+    type: number;
 }
 
 
 export const Todos:React.FC<Props> = (props: Props) =>{
     const [dialogOpen] = useState(false);
-
-    const { todoList } = props;
-    const sortedTodoList:TodoType[] = todoList.sort((n1, n2) => {
-        if(n1.position > n2.position){
-            return 1;
-        }else if(n1.position < n2.position){
-            return -1;
-        }else{
-            return 0;
-        }
-    });
-
-    const todoListElement = sortedTodoList.map((todoList)=>{
-        return(
-            <TodoWrapper 
-                todo={todoList}
-                isOpen={dialogOpen}
-                onClose={() =>{}}
-            />
-        )
-    });
+    const todos  = props.todos;
+    const type = props.type;
 
     return(
         <>
-            <AllTodo>
-                {todoListElement}
+        <AllTodo>
+            <Droppable droppableId={type.toString()} type={`droppableSubItem`}>
+                {(provided, snapshot)=>(
+                    <div
+                        ref={provided.innerRef}
+                        style={getListStyle(snapshot.isDraggingOver)}
+                    >
+                    {
+                        todos.map((todo, index)=>
+                            <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
+                                {(provided, snapshot) =>(
+                                    
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={getItemStyle(
+                                                snapshot.isDragging,
+                                                provided.draggableProps.style
+                                            )}
+                                        >
+                                            <TodoWrapper 
+                                                todo={todo}
+                                                isOpen={dialogOpen}
+                                                onClose={() =>{}}
+                                            />
+                                        </div>
+                                        
+                                    
+                                )}
+                            </Draggable>
+                        )
+                    }
+                    {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
             </AllTodo>
         </>
     )

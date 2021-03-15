@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { TodoType} from './todos';
+import { TodoType} from './types';
 import {TodoModal} from './todoDialog';
 
 const {useState} = React;
 
-const Wrapper = styled.div`
-    display: flex;
+const Wrapper = styled.li`
+    list-style:none;
     background: #fff;
     margin: 5px;
     padding: 5px;
@@ -31,7 +31,7 @@ export const TodoWrapper:React.FC<Props> = (props) =>{
     
     return(
         <>
-            <Wrapper onClick={handleClick}>
+            <Wrapper key={todo.id} onClick={handleClick}>
                 <TitleArea>{todo.title}</TitleArea>
             </Wrapper>
             {

@@ -14,15 +14,16 @@ export const getItemStyle = (isDragging: boolean, draggableStyle:any) => ({
 
 export const getListStyle = (isDraggingOver:boolean) => ({
     display: "flex",
+    height: "auto",
     background: isDraggingOver ? "lightblue" : "white",
-    padding: 0,
+    padding: grid,
 
 });
 
 export const getSubItemStyle = (isDragging: boolean, draggableStyle:any) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
-    padding: 0,
+    padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
     // change background colour if dragging
     background: isDragging ? "#d1d1d1" : "white",
@@ -33,6 +34,6 @@ export const getSubItemStyle = (isDragging: boolean, draggableStyle:any) => ({
 
 export const getSubListStyle = (isDraggingOver:boolean) => ({
     background: isDraggingOver ? "lightblue" : "white",
-    padding: 0,
+    padding: grid,
 
 });

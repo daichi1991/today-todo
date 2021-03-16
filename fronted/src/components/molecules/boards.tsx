@@ -16,7 +16,7 @@ const AllBoard = styled.div`
 const BoardArea = styled.div`
     margin: 0 5px;
     padding: 0 5px;
-    height: 80vh;
+    height: auto;
     width: 300px;
 `
 

@@ -8,13 +8,16 @@ import { getItemStyle, getListStyle } from './styles'
 
 const AllBoard = styled.div`
     display: flex;
+    lex-wrap: nowrap;;
     margin: 10px 0 ;
+    width:100%;
 `
 
 const BoardArea = styled.div`
     margin: 0 5px;
     padding: 0 5px;
-    background: #f1f1f1;
+    height: 80vh;
+    width: 300px;
 `
 
 const BoardName = styled.p`

@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {TodoWrapper} from './todoWrapper';
 import type { TodoType } from './types'
-import { getItemStyle, getListStyle } from './styles'
+import { getItemStyle, getListStyle, getSubItemStyle, getSubListStyle } from './styles'
 
 const {useState} = React;
 
 const AllTodo = styled.div`
-    podding:50px;
+
 `;
 
 
@@ -30,7 +30,7 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                 {(provided, snapshot)=>(
                     <div
                         ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}
+                        style={getSubListStyle(snapshot.isDraggingOver)}
                     >
                     {
                         todos.map((todo, index)=>
@@ -41,7 +41,7 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
-                                            style={getItemStyle(
+                                            style={getSubItemStyle(
                                                 snapshot.isDragging,
                                                 provided.draggableProps.style
                                             )}

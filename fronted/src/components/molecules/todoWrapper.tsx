@@ -5,11 +5,7 @@ import {TodoModal} from './todoDialog';
 
 const {useState} = React;
 
-const Wrapper = styled.li`
-    list-style:none;
-    background: #fff;
-    margin: 5px;
-    padding: 5px;
+const Wrapper = styled.div`
 `;
 
 const TitleArea = styled.p`

@@ -38,7 +38,7 @@ export const Boards:React.FC<Props> = (props: Props) =>{
     return(
         <>
         <AllBoard >
-            <Droppable droppableId="droppable" type="droppableItem">
+            <Droppable droppableId="droppable" type="droppableItem" direction="horizontal">
                 {(provided, snapshot)=>(
                     <div
                         ref={provided.innerRef}   

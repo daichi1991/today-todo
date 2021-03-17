@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {TodoWrapper} from './todoWrapper';
 import type { TodoType } from './types'
-import { getItemStyle, getListStyle, getSubItemStyle, getSubListStyle } from './styles'
+import { getSubItemStyle, getSubListStyle } from './styles'
 
 const {useState} = React;
 

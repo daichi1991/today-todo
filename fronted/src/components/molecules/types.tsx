@@ -17,3 +17,16 @@ export type TodoType = {
     title: string,
     memo: string,
 }
+
+export type BoardType = 
+    {
+        id:number, 
+        name:string, 
+        todos: 
+            {
+                id:number, 
+                title: string, 
+                memo: string, 
+            }[]
+        
+    }

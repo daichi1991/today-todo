@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components'
 import { Droppable,Draggable } from 'react-beautiful-dnd'
 import { Todos } from './todos'
-import { ContentsDateType } from './types'
+import { ContentsDateType,BoardType } from './types'
 import { getItemStyle, getListStyle } from './styles'
 
 const {useState} = React;
@@ -29,13 +29,14 @@ const NewBoard = styled.div`
 
 `;
 
-const AddBoard = styled.form`
+const AddBoard = styled.div`
 
 `;
 
 
 interface Props{
     items: ContentsDateType;
+    handleNewBoardSubmit: (boardName:string) => void;
 };
 
 export const Boards:React.FC<Props> = (props: Props) =>{
@@ -51,17 +52,7 @@ export const Boards:React.FC<Props> = (props: Props) =>{
         setNewBoardName(event.target.value)
     };
     
-    const handleNewBoardSubmit = (event: React.FormEvent<HTMLFormElement>) =>{
-        event.preventDefault();
-        const aryMax = (a:number, b:number) => {
-            return Math.max(a,b);
-        }
-        let ary = items.map(item => item.id)
-        console.log(ary);
 
-        let max = ary.reduce(aryMax);
-        
-    };
 
     return(
         <AllBoard >
@@ -103,12 +94,12 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                     add board
                 </div>
                 {addForm && 
-                <AddBoard onSubmit={handleNewBoardSubmit}>
+                <AddBoard >
                     <label>
                         board name
                         <input type="text" value={newBoardName} onChange={handleNewBoardName}/>
                     </label>
-                    <input type="submit" value="Submit" />
+                    <button onClick={(e) => props.handleNewBoardSubmit(e.currentTarget.value)} >add!</button>
                 </AddBoard>
                 }
             </NewBoard>

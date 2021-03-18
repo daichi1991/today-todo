@@ -4,7 +4,7 @@ import { DragDropContext} from 'react-beautiful-dnd';
 import { Header } from './components/molecules/header';
 import { Boards } from './components/molecules/boards';
 import { CONTENTS } from './components/molecules/contentsData';
-import {TodoType} from './components/molecules/types';
+import {ContentsDateType ,TodoType, BoardType} from './components/molecules/types';
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -78,9 +78,35 @@ function App() {
     }
   }
 
+  const changeParent = (board:ContentsDateType ) =>{
+    setStateItems(board)
+  }
 
+  const handleNewBoardSubmit = (boardName: string) =>{
+    const items = stateItems;
+    const aryMax = (a:number, b:number) => {
+        return Math.max(a,b);
+    }
+    const ary = items.map(item => item.id)
+    const max:number = ary.reduce(aryMax)+1;
+    const name:string = boardName;
 
+    let newBoard =  {
+        id:max, 
+        name:name, 
+        todos: [{
+          id:1, 
+          title: 'new Todo', 
+          memo: '', 
+          }
+        ]
+      }
 
+    items.push(newBoard);
+    setStateItems(items);
+    console.log(stateItems);
+
+};
 
 
   return (
@@ -89,7 +115,7 @@ function App() {
       <DragDropContext
         onDragEnd={onDragEnd}
       >
-          <Boards items={stateItems} />
+          <Boards items={stateItems} handleNewBoardSubmit={handleNewBoardSubmit} />
       </DragDropContext>
       
     </div>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { TodoType} from './types';
-import {TodoModal} from './todoDialog';
+import {TodoDialog} from './todoDialog';
 
 const {useState} = React;
 
@@ -13,9 +13,11 @@ const TitleArea = styled.p`
 
 
 interface Props{
+    boardId:number;
     todo:TodoType;
     isOpen:boolean;
     onClose:()=> void;
+    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
 }
 
 export const TodoWrapper:React.FC<Props> = (props) =>{
@@ -32,10 +34,12 @@ export const TodoWrapper:React.FC<Props> = (props) =>{
             </Wrapper>
             {
                 dialogOpen&&
-                <TodoModal
+                <TodoDialog
+                    boardId={props.boardId}
                     todo={todo}
                     isOpen={dialogOpen}
                     onClose={handleClick}
+                    handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
                 />
             }
         </>

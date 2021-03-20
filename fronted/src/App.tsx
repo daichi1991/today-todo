@@ -5,6 +5,7 @@ import { Header } from './components/molecules/header';
 import { Boards } from './components/molecules/boards';
 import { CONTENTS } from './components/molecules/contentsData';
 import {ContentsDateType ,TodoType, BoardType} from './components/molecules/types';
+import { Todos } from './components/molecules/todos';
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -126,6 +127,17 @@ function App() {
 
   };
 
+  const handleDeleteTodoSubmit = (boardId:number, todoId: string) =>{
+    const allBoard = [...stateItems];
+    const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
+    board.todos!.some((v,i) => {
+        v.id===todoId&&board.todos!.splice(i,1);
+        return board;
+      })
+
+    setStateItems(allBoard);
+  };
+
 
   return (
     <div className="App">
@@ -136,8 +148,8 @@ function App() {
           <Boards items={stateItems}
           handleNewBoardSubmit={handleNewBoardSubmit} 
           handleNewTodoSubmit={handleNewTodoSubmit}
+          handleDeleteTodoSubmit={handleDeleteTodoSubmit}
           />
-          {console.log(stateItems)}
       </DragDropContext>
       
     </div>

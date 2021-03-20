@@ -37,13 +37,14 @@ interface Props{
     items: ContentsDateType;
     handleNewBoardSubmit: (boardName:string) => void;
     handleNewTodoSubmit: (boardId:number, todoName: string) => void;
+    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
 };
 
 export const Boards:React.FC<Props> = (props: Props) =>{
     const {items} = props;
     const [addForm, setAddform] = useState(false);
     const [newBoardName, setNewBoardName] = useState('');
-    const [addTodoFrm, setAddTodoform] = useState<boolean>(false);
+    const [addTodoForm, setAddTodoform] = useState<boolean>(false);
     const [newTodoName, setNewTodoName] = useState<string>('');
 
     const openAddform = () => {
@@ -58,12 +59,6 @@ export const Boards:React.FC<Props> = (props: Props) =>{
         setAddform(false);
         setNewBoardName('')
         props.handleNewBoardSubmit(newBoardName);
-    }
-
-    const handleNewTodoSubmit = (boardId:number, todoName: string) => {
-        setNewTodoName('');
-        setAddTodoform(false);
-        props.handleNewTodoSubmit(boardId, todoName)
     }
 
 
@@ -94,7 +89,8 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                                                     parentBoardId={item.id}
                                                     todos={item.todos}
                                                     type={item.id}
-                                                    handleNewTodoSubmit={handleNewTodoSubmit}
+                                                    handleNewTodoSubmit={props.handleNewTodoSubmit}
+                                                    handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
                                                 />
                                         </BoardArea>
                                     </div>

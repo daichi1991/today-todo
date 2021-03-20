@@ -22,6 +22,7 @@ interface Props {
     todos: TodoType[]|undefined;
     type: number;
     handleNewTodoSubmit: (boardId:number, todoName: string) => void;
+    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
 }
 
 
@@ -72,9 +73,11 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                                             )}
                                         >
                                             <TodoWrapper 
+                                                boardId={props.parentBoardId}
                                                 todo={todo}
                                                 isOpen={dialogOpen}
                                                 onClose={() =>{}}
+                                                handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
                                             />
                                         </div>
                                         

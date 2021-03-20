@@ -8,26 +8,39 @@ const DialogWrapper = styled.div`
     height:60vh;
 `;
 
+const DialogDelete = styled.div`
+`;
+
 interface Props{
+    boardId:number;
     todo:TodoType;
     isOpen:boolean;
     onClose:()=> void;
+    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
 }
 
-export const TodoModal:React.FC<Props> = (props) => {
-    const {todo, isOpen, onClose} = props;
+export const TodoDialog:React.FC<Props> = (props) => {
+    const {boardId, todo, isOpen, onClose} = props;
+
+    const deleteTodo = (boardId:number, todoId: string) =>{
+        window.confirm('are you usre?')&&props.handleDeleteTodoSubmit(boardId, todoId);
+    }
+
     return(
             <Dialog 
                 open={isOpen}
                 onClose={onClose}
             >
                 <DialogWrapper>
-                <DialogTitle>
-                    {todo.title}
-                </DialogTitle>
-                <DialogContent>
-                        {todo.memo}
-                </DialogContent>
+                    <DialogTitle>
+                        {todo.title}
+                    </DialogTitle>
+                    <DialogDelete onClick={(e) =>deleteTodo(boardId,todo.id)}>
+                        削除
+                    </DialogDelete>
+                    <DialogContent>
+                            {todo.memo}
+                    </DialogContent>
                 </DialogWrapper>
             </Dialog>
     )

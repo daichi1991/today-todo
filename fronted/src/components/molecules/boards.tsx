@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components'
 import { Droppable,Draggable } from 'react-beautiful-dnd'
 import { Todos } from './todos'
-import { ContentsDateType,BoardType } from './types'
+import { ContentsDateType } from './types'
 import { getItemStyle, getListStyle } from './styles'
 
 const {useState} = React;
@@ -33,16 +33,18 @@ const AddBoard = styled.div`
 
 `;
 
-
 interface Props{
     items: ContentsDateType;
     handleNewBoardSubmit: (boardName:string) => void;
+    handleNewTodoSubmit: (boardId:number, todoName: string) => void;
 };
 
 export const Boards:React.FC<Props> = (props: Props) =>{
     const {items} = props;
     const [addForm, setAddform] = useState(false);
     const [newBoardName, setNewBoardName] = useState('');
+    const [addTodoFrm, setAddTodoform] = useState<boolean>(false);
+    const [newTodoName, setNewTodoName] = useState<string>('');
 
     const openAddform = () => {
         setAddform(!addForm);
@@ -52,12 +54,24 @@ export const Boards:React.FC<Props> = (props: Props) =>{
         setNewBoardName(event.target.value)
     };
     
+    const handleNewBoardSubmit = (newBoardName: string) =>{
+        setAddform(false);
+        setNewBoardName('')
+        props.handleNewBoardSubmit(newBoardName);
+    }
+
+    const handleNewTodoSubmit = (boardId:number, todoName: string) => {
+        setNewTodoName('');
+        setAddTodoform(false);
+        props.handleNewTodoSubmit(boardId, todoName)
+    }
 
 
     return(
         <AllBoard >
             <Droppable droppableId="droppable" type="droppableItem" direction="horizontal">
                 {(provided, snapshot)=>(
+                    
                     <div
                         ref={provided.innerRef}   
                         style={getListStyle(snapshot.isDraggingOver)}                 
@@ -76,8 +90,12 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                                     >
                                         <BoardArea>
                                             <BoardName>{item.name}</BoardName>
-                                            <Todos todos={item.todos} type={item.id}/>
-                                            
+                                                <Todos
+                                                    parentBoardId={item.id}
+                                                    todos={item.todos}
+                                                    type={item.id}
+                                                    handleNewTodoSubmit={handleNewTodoSubmit}
+                                                />
                                         </BoardArea>
                                     </div>
                                 )}
@@ -85,7 +103,6 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                         )
                         }
                         {provided.placeholder}
-
                     </div>
                 )}
             </Droppable>
@@ -99,7 +116,7 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                         board name
                         <input type="text" value={newBoardName} onChange={handleNewBoardName}/>
                     </label>
-                    <button onClick={(e) => props.handleNewBoardSubmit(e.currentTarget.value)} >add!</button>
+                    <button onClick={(e) => handleNewBoardSubmit(newBoardName)} >add!</button>
                 </AddBoard>
                 }
             </NewBoard>

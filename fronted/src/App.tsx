@@ -16,7 +16,7 @@ const reorder:any = (list: any, startIndex: number, endIndex: number) => {
 
 function App() {
 
-  const [stateItems, setStateItems] = useState(CONTENTS);
+  const [stateItems, setStateItems] = useState<ContentsDateType>(CONTENTS);
 
   function onDragEnd(result:any) {
     // dropped outside the list
@@ -41,7 +41,7 @@ function App() {
       const sourceSubItems = itemSubItemMap[sourceParentId];
       const destSubItems = itemSubItemMap[destParentId];
 
-      let newItems = [...stateItems];
+      let newItems:ContentsDateType = [...stateItems];
 
       /** In this case subItems are reOrdered inside same Parent */
       if (sourceParentId === destParentId) {
@@ -72,18 +72,16 @@ function App() {
           return item;
         });
         setStateItems(newItems);
+
+        
         
       }
       
     }
   }
 
-  const changeParent = (board:ContentsDateType ) =>{
-    setStateItems(board)
-  }
-
   const handleNewBoardSubmit = (boardName: string) =>{
-    const items = stateItems;
+    const items:ContentsDateType = [...stateItems];
     const aryMax = (a:number, b:number) => {
         return Math.max(a,b);
     }
@@ -91,22 +89,42 @@ function App() {
     const max:number = ary.reduce(aryMax)+1;
     const name:string = boardName;
 
-    let newBoard =  {
+    const newBoard:BoardType =  {
         id:max, 
-        name:name, 
-        todos: [{
-          id:1, 
-          title: 'new Todo', 
-          memo: '', 
-          }
-        ]
+        name:name,
+        todos:[],
       }
 
-    items.push(newBoard);
-    setStateItems(items);
-    console.log(stateItems);
+    const updatedBoard = [...stateItems,newBoard];
 
-};
+    setStateItems(updatedBoard);
+
+  };
+
+  const handleNewTodoSubmit = (boardId:number, todoName: string) =>{
+    const allBoard = [...stateItems];
+    const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
+    const todos:TodoType[]|undefined = board.todos? board.todos.filter((item) => item !== undefined):undefined;
+
+    const date = new Date();
+    const todoId = date.toISOString() + todoName;
+
+    let newTodo:TodoType =  {
+        id:todoId, 
+        title: todoName,
+
+      }
+
+    if(todos){
+      todos.push(newTodo);
+    }
+
+    const newTodoList = todos?todos: [newTodo];
+    board.todos = newTodoList;
+
+    setStateItems(allBoard);
+
+  };
 
 
   return (
@@ -115,7 +133,11 @@ function App() {
       <DragDropContext
         onDragEnd={onDragEnd}
       >
-          <Boards items={stateItems} handleNewBoardSubmit={handleNewBoardSubmit} />
+          <Boards items={stateItems}
+          handleNewBoardSubmit={handleNewBoardSubmit} 
+          handleNewTodoSubmit={handleNewTodoSubmit}
+          />
+          {console.log(stateItems)}
       </DragDropContext>
       
     </div>

@@ -1,32 +1,18 @@
 export type ContentsDateType = 
-    {
-        id:number, 
-        name:string, 
-        todos: 
-            {
-                id:number, 
-                title: string, 
-                memo: string, 
-            }[]
-        
-    }[]
+    BoardType[]
+
 ;
 
 export type TodoType = {
-    id: number,
+    id: string,
     title: string,
-    memo: string,
-}
+    memo?: string,
+};
 
 export type BoardType = 
     {
         id:number, 
         name:string, 
-        todos: 
-            {
-                id:number, 
-                title: string, 
-                memo: string, 
-            }[]
+        todos?: TodoType[]
         
-    }
+    };

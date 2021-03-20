@@ -4,7 +4,7 @@ export const CONTENTS = [
         name:"Todo", 
         todos: [
             {
-                id:101, 
+                id:'101', 
                 title: "起床", 
                 memo: "おはよう", 
             },
@@ -15,12 +15,12 @@ export const CONTENTS = [
         name:"Doing", 
         todos:[
             {
-                id:103, 
+                id:'103', 
                 title: "朝食", 
                 memo: "もぐもぐ", 
             },
             {
-                id:104, 
+                id:'104', 
                 title: "歯磨き", 
                 memo: "しゃかしゃか", 
             },
@@ -31,7 +31,7 @@ export const CONTENTS = [
         name:"Done", 
         todos:[
             {
-                id:102, 
+                id:'102', 
                 title: "洗顔", 
                 memo: "ばしゃばしゃ", 
             },

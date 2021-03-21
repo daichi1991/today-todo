@@ -1,9 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components'
 import { Droppable,Draggable } from 'react-beautiful-dnd'
-import { Todos } from './todos'
-import { ContentsDateType } from './types'
 import { getItemStyle, getListStyle } from './styles'
+import { ContentsDateType } from './types'
+
+import { Todos } from './todos'
+import {BoardMenu} from './boardMenu'
 
 const {useState} = React;
 
@@ -33,10 +35,14 @@ const AddBoard = styled.div`
 
 `;
 
+const OpenBoardMenu = styled.button`
+`;
+
 interface Props{
     items: ContentsDateType;
     handleNewBoardSubmit: (boardName:string) => void;
     handleNewTodoSubmit: (boardId:number, todoName: string) => void;
+    handelDeleteBoardSubmit:(boardId:number)=>void;
     handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
 };
 
@@ -46,6 +52,12 @@ export const Boards:React.FC<Props> = (props: Props) =>{
     const [newBoardName, setNewBoardName] = useState('');
     const [addTodoForm, setAddTodoform] = useState<boolean>(false);
     const [newTodoName, setNewTodoName] = useState<string>('');
+
+    const [boardMenuOpen, setBoardMenuOpen] = useState<boolean>(false);
+
+    const handelBoardMenu = () =>{
+        setBoardMenuOpen(!boardMenuOpen);
+    };
 
     const openAddform = () => {
         setAddform(!addForm);
@@ -85,6 +97,15 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                                     >
                                         <BoardArea>
                                             <BoardName>{item.name}</BoardName>
+                                            <OpenBoardMenu onClick={handelBoardMenu}>***</OpenBoardMenu>
+                                            {boardMenuOpen&&
+                                                <BoardMenu
+                                                    boardId={item.id}
+                                                    isOpen={boardMenuOpen}
+                                                    onClose={handelBoardMenu}
+                                                    handelDeleteBoardSubmit={props.handelDeleteBoardSubmit}
+                                                />
+                                            }
                                                 <Todos
                                                     parentBoardId={item.id}
                                                     todos={item.todos}

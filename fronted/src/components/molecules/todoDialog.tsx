@@ -8,7 +8,7 @@ const DialogWrapper = styled.div`
     height:60vh;
 `;
 
-const DialogDelete = styled.div`
+const DeleteTodo = styled.div`
 `;
 
 interface Props{
@@ -35,9 +35,9 @@ export const TodoDialog:React.FC<Props> = (props) => {
                     <DialogTitle>
                         {todo.title}
                     </DialogTitle>
-                    <DialogDelete onClick={(e) =>deleteTodo(boardId,todo.id)}>
+                    <DeleteTodo onClick={(e) =>deleteTodo(boardId,todo.id)}>
                         削除
-                    </DialogDelete>
+                    </DeleteTodo>
                     <DialogContent>
                             {todo.memo}
                     </DialogContent>

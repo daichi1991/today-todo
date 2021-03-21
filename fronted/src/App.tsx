@@ -127,6 +127,19 @@ function App() {
 
   };
 
+  const handelDeleteBoardSubmit = (boardId:number) =>{
+    const allBoard =[...stateItems];
+    allBoard.some((v,i)=>{
+      v.id===boardId&&allBoard.splice(i,1);
+      return allBoard;
+    })
+    console.log(boardId);
+    console.log(allBoard);
+
+    setStateItems(allBoard);
+
+  }
+
   const handleDeleteTodoSubmit = (boardId:number, todoId: string) =>{
     const allBoard = [...stateItems];
     const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
@@ -148,6 +161,7 @@ function App() {
           <Boards items={stateItems}
           handleNewBoardSubmit={handleNewBoardSubmit} 
           handleNewTodoSubmit={handleNewTodoSubmit}
+          handelDeleteBoardSubmit={handelDeleteBoardSubmit}
           handleDeleteTodoSubmit={handleDeleteTodoSubmit}
           />
       </DragDropContext>

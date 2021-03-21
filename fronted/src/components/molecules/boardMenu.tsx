@@ -21,12 +21,13 @@ export const BoardMenu:React.FC<Props> = (props: Props)=>{
 
     return(
         <Dialog 
+            key={boardId}
             open={isOpen}
             onClose={onClose}
         >
                 <DialogContent>
                     <DeleteBoard onClick={(e)=>deleteBoardSubmit(boardId)}>
-                        delete board
+                        {boardId}delete board
                     </DeleteBoard>
                 </DialogContent>
         </Dialog>

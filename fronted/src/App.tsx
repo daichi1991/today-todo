@@ -129,12 +129,8 @@ function App() {
 
   const handelDeleteBoardSubmit = (boardId:number) =>{
     const allBoard =[...stateItems];
-    allBoard.some((v,i)=>{
-      v.id===boardId&&allBoard.splice(i,1);
-      return allBoard;
-    })
-    console.log(boardId);
-    console.log(allBoard);
+    const targetIndex:number = allBoard.findIndex(({id}) => id ===boardId);
+    allBoard.splice(targetIndex,1);
 
     setStateItems(allBoard);
 
@@ -143,10 +139,9 @@ function App() {
   const handleDeleteTodoSubmit = (boardId:number, todoId: string) =>{
     const allBoard = [...stateItems];
     const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
-    board.todos!.some((v,i) => {
-        v.id===todoId&&board.todos!.splice(i,1);
-        return board;
-      })
+    const targetIndex = board.todos!.findIndex(({id}) => id===todoId );
+    board.todos!.splice(targetIndex,1);
+
 
     setStateItems(allBoard);
   };

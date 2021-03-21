@@ -6,6 +6,7 @@ import { ContentsDateType } from './types'
 
 import { Todos } from './todos'
 import {BoardMenu} from './boardMenu'
+import { BoardWrapper } from './boardWrapper';
 
 const {useState} = React;
 
@@ -95,25 +96,13 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                                             provided.draggableProps.style
                                         )}
                                     >
-                                        <BoardArea>
-                                            <BoardName>{item.name}</BoardName>
-                                            <OpenBoardMenu onClick={handelBoardMenu}>***</OpenBoardMenu>
-                                            {boardMenuOpen&&
-                                                <BoardMenu
-                                                    boardId={item.id}
-                                                    isOpen={boardMenuOpen}
-                                                    onClose={handelBoardMenu}
-                                                    handelDeleteBoardSubmit={props.handelDeleteBoardSubmit}
-                                                />
-                                            }
-                                                <Todos
-                                                    parentBoardId={item.id}
-                                                    todos={item.todos}
-                                                    type={item.id}
-                                                    handleNewTodoSubmit={props.handleNewTodoSubmit}
-                                                    handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
-                                                />
-                                        </BoardArea>
+                                        <BoardWrapper 
+                                            board={item}
+                                            handleNewTodoSubmit={props.handleNewTodoSubmit}
+                                            handelDeleteBoardSubmit={props.handelDeleteBoardSubmit}
+                                            handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
+                                        />
+
                                     </div>
                                 )}
                             </Draggable>

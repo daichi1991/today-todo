@@ -45,6 +45,7 @@ interface Props{
     handleNewTodoSubmit: (boardId:number, todoName: string) => void;
     handelDeleteBoardSubmit:(boardId:number)=>void;
     handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
+    handelEditBoardName: (boardId:number, boardName:string) => void;
 };
 
 export const Boards:React.FC<Props> = (props: Props) =>{
@@ -101,6 +102,7 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                                             handleNewTodoSubmit={props.handleNewTodoSubmit}
                                             handelDeleteBoardSubmit={props.handelDeleteBoardSubmit}
                                             handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
+                                            handelEditBoardName={props.handelEditBoardName}
                                         />
 
                                     </div>

@@ -87,7 +87,7 @@ function App() {
         return Math.max(a,b);
     }
     const ary = items.map(item => item.id)
-    const max:number = ary.reduce(aryMax)+1;
+    const max:number = ary.length>0?ary.reduce(aryMax)+1:1;
     const name:string = boardName;
 
     const newBoard:BoardType =  {
@@ -146,6 +146,13 @@ function App() {
     setStateItems(allBoard);
   };
 
+  const handelEditBoardName = (boardId:number, boardName:string) =>{
+    const allBoard = [...stateItems];
+    const board:BoardType = allBoard.find((item)=> item.id ===boardId)!;
+    board.name = boardName;
+    setStateItems(allBoard);
+  }
+
 
   return (
     <div className="App">
@@ -158,6 +165,7 @@ function App() {
           handleNewTodoSubmit={handleNewTodoSubmit}
           handelDeleteBoardSubmit={handelDeleteBoardSubmit}
           handleDeleteTodoSubmit={handleDeleteTodoSubmit}
+          handelEditBoardName={handelEditBoardName}
           />
       </DragDropContext>
       

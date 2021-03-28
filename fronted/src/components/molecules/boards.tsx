@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Droppable,Draggable } from 'react-beautiful-dnd'
 import { getItemStyle, getListStyle } from './styles'
 import { ContentsDateType } from './types'
+import { AddCircle } from '@material-ui/icons';
 
 import { Todos } from './todos'
 import {BoardMenu} from './boardMenu'
@@ -115,16 +116,13 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                 )}
             </Droppable>
             <NewBoard>
-                <div onClick={openAddform}>
-                    add board
-                </div>
+                    <AddCircle onClick={openAddform}/>
                 {addForm && 
                 <AddBoard >
                     <label>
-                        board name
-                        <input type="text" value={newBoardName} onChange={handleNewBoardName}/>
+                        <input type="text" value={newBoardName} onChange={handleNewBoardName} placeholder="new board"/>
                     </label>
-                    <button onClick={(e) => handleNewBoardSubmit(newBoardName)} >add!</button>
+                    <button onClick={(e) => handleNewBoardSubmit(newBoardName)} >add</button>
                 </AddBoard>
                 }
             </NewBoard>

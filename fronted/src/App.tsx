@@ -5,7 +5,6 @@ import { Header } from './components/molecules/header';
 import { Boards } from './components/molecules/boards';
 import { CONTENTS } from './components/molecules/contentsData';
 import {ContentsDateType ,TodoType, BoardType} from './components/molecules/types';
-import { Todos } from './components/molecules/todos';
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -147,6 +146,7 @@ function App() {
   };
 
   const handelEditBoardName = (boardId:number, boardName:string) =>{
+    console.log(boardId);
     const allBoard = [...stateItems];
     const board:BoardType = allBoard.find((item)=> item.id ===boardId)!;
     board.name = boardName;

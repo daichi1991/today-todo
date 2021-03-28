@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import {DialogContent, Dialog, DialogTitle} from '@material-ui/core';
+import { Delete }from '@material-ui/icons'
 import {TodoType} from './types';
 
 const DialogWrapper = styled.div`
@@ -23,7 +24,7 @@ export const TodoDialog:React.FC<Props> = (props) => {
     const {boardId, todo, isOpen, onClose} = props;
 
     const deleteTodo = (boardId:number, todoId: string) =>{
-        window.confirm('are you usre?')&&props.handleDeleteTodoSubmit(boardId, todoId);
+        window.confirm('are you sure?')&&props.handleDeleteTodoSubmit(boardId, todoId);
     }
 
     return(
@@ -35,9 +36,7 @@ export const TodoDialog:React.FC<Props> = (props) => {
                     <DialogTitle>
                         {todo.title}
                     </DialogTitle>
-                    <DeleteTodo onClick={(e) =>deleteTodo(boardId,todo.id)}>
-                        削除
-                    </DeleteTodo>
+                        <Delete onClick={(e) =>deleteTodo(boardId,todo.id)}/>
                     <DialogContent>
                             {todo.memo}
                     </DialogContent>

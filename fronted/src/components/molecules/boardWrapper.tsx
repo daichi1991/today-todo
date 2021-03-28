@@ -1,26 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { BoardType, TodoType } from './types';
-import {Todos} from './todos'
-import {BoardMenu} from './boardMenu'
+import { BoardType } from './types';
+import {Todos} from './todos';
+import {BoardMenu} from './boardMenu';
+import { Menu } from '@material-ui/icons';
+import { ClickAwayListener } from '@material-ui/core';
 
-const {useState, useRef, useEffect} = React;
+const {useState} = React;
 
 const BoardArea = styled.div`
     margin: 0 5px;
     padding: 0 5px;
     height: auto;
     width: 300px;
-`;
-
-const BoardName = styled.p`
-    font-size:16px;
-`;
-
-const OpenBoardMenu = styled.button`
-`;
-
-const EditName = styled.div`
 `;
 
 interface Props{
@@ -31,60 +23,52 @@ interface Props{
     handelEditBoardName: (boardId:number, boardName:string) => void;
 }
 
+
+
 export const BoardWrapper:React.FC<Props> = (props:Props) => {
 
-    const {board} = props
+    const {board, handelEditBoardName} = props
     const [boardMenuOpen, setBoardMenuOpen] = useState<boolean>(false);
-    const [nameEditOpen, setNameEditOpen] = useState<boolean>(false);
-    const [editName, setEditName] = useState<string>(board.name)
+    const [boardName, setBoardName] = useState<string>(board.name);
+    const [isFocusName, setIsFocusName] = useState(false);
+
+
+    const handleEditeName = (event:React.ChangeEvent<HTMLInputElement>) =>{
+        setBoardName(event.target.value)
+    };
+
 
     const handleBoardMenu = () =>{
         setBoardMenuOpen(!boardMenuOpen);
     };
 
-    const focusRef = useRef();
-    const documentClickHandler = useRef();
-
-    useEffect(() => {
-        documentClickHandler.current = e => {
-            console.log('documentClickHandler')
-
-            if(focusRef.current.contains(e.target)){
-                return;
-            }
-            setNameEditOpen(false);
-            removeDocumentClickHandler();
+    const handleBoardNameFocusAway = () =>{
+        setIsFocusName(false);
+        if(board.name !== boardName){
+            handelEditBoardName(board.id, boardName);
         }
-    }, []);
-
-    const removeDocumentClickHandler = () => {
-        console.log('removeDocumentClickHandler')
-        
-        document.removeEventListener('click', documentClickHandler.current)
     }
 
-    const handleNameEditOpen = () =>{
-        setNameEditOpen(true);
-
-    };
-
-    const handleEditeName = (event:React.ChangeEvent<HTMLInputElement>) =>{
-        setEditName(event.target.value)
-    };
-
-    const handelEditBoardName = ()=>{
-        props.handelEditBoardName(board.id, editName);
+    const handleBoadNameFocus = () =>{
+        setIsFocusName(true);
     }
 
     return(
         <BoardArea key={board.id}>
-        <BoardName onClick={handleNameEditOpen}>
-            {nameEditOpen?
-            <EditName ><input type="text" value={editName} onChange={handleEditeName} onBlur={handelEditBoardName} onSubmit={handelEditBoardName}/></EditName>
-            :board.name
-            }
-        </BoardName>
-        <OpenBoardMenu  onClick={handleBoardMenu}>***</OpenBoardMenu>
+            <ClickAwayListener onClickAway={handleBoardNameFocusAway}>
+                <div onClick={handleBoadNameFocus}>
+                {isFocusName?
+                    <input 
+                    type="text" 
+                    value={boardName} 
+                    onChange={handleEditeName} 
+                    onKeyPress={e => {if(e.key ==='Enter'){handleBoardNameFocusAway()}}} />
+                    :
+                    boardName
+                }
+                </div>
+            </ClickAwayListener>
+        <Menu onClick={handleBoardMenu} />
 
             <Todos
                 parentBoardId={board.id}

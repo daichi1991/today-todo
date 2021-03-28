@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
+import { AddCircle } from '@material-ui/icons'
 import {TodoWrapper} from './todoWrapper';
 import type { TodoType } from './types'
 import { getSubItemStyle, getSubListStyle } from './styles'
@@ -91,13 +92,11 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                 )}
             </Droppable>
             <NewTodo>
-                <div onClick={openAddform}>
-                    add todo
-                </div>
+                <AddCircle onClick={openAddform}/>
                 {addForm && 
                 <AddTodo >
-                        <input type="text" value={newTodoName} onChange={handleNewTodoName}/>
-                    <button onClick={(e) => handleNewTodoSubmit(props.parentBoardId, newTodoName)} >add!</button>
+                        <input type="text" value={newTodoName} onChange={handleNewTodoName} placeholder="new todo"/>
+                    <button onClick={(e) => handleNewTodoSubmit(props.parentBoardId, newTodoName)} >add</button>
                 </AddTodo>
                 }
             </NewTodo>

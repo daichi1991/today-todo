@@ -1,6 +1,5 @@
-export type ContentsDateType = 
+export type ContentsDataType = 
     BoardType[]
-
 ;
 
 export type TodoType = {

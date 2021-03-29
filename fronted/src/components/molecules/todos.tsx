@@ -9,7 +9,8 @@ import { getSubItemStyle, getSubListStyle } from './styles'
 const {useState} = React;
 
 const AllTodo = styled.div`
-
+    height: 70vh;
+    overflow-x: auto;
 `;
 
 const NewTodo = styled.div`
@@ -24,6 +25,8 @@ interface Props {
     type: number;
     handleNewTodoSubmit: (boardId:number, todoName: string) => void;
     handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
+    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
+    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
 }
 
 
@@ -79,6 +82,8 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                                                 isOpen={dialogOpen}
                                                 onClose={() =>{}}
                                                 handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
+                                                handleEditTodoTitle={props.handleEditTodoTitle}
+                                                handleEditTodoMemo={props.handleEditTodoMemo}
                                             />
                                         </div>
                                         

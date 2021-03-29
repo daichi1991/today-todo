@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 const HeaderWrapper = styled.header`
     background: black;
-    height: 2rem;
+    width:100vw;
+    height: 6vh;
     line-height: 2rem;
 `
 

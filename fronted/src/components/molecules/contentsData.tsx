@@ -1,4 +1,6 @@
-export const CONTENTS = [
+import {ContentsDataType} from './types'
+
+export const CONTENTS:ContentsDataType = [
     {
         id:1, 
         name:"Todo", 

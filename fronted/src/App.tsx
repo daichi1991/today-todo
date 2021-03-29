@@ -4,7 +4,9 @@ import { DragDropContext} from 'react-beautiful-dnd';
 import { Header } from './components/molecules/header';
 import { Boards } from './components/molecules/boards';
 import { CONTENTS } from './components/molecules/contentsData';
-import {ContentsDateType ,TodoType, BoardType} from './components/molecules/types';
+import {ContentsDataType ,TodoType, BoardType} from './components/molecules/types';
+import {ContentsContext} from './contexts'
+
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
   const result = Array.from(list);
@@ -16,7 +18,8 @@ const reorder:any = (list: any, startIndex: number, endIndex: number) => {
 
 function App() {
 
-  const [stateItems, setStateItems] = useState<ContentsDateType>(CONTENTS);
+  const [stateItems, setStateItems] = useState<ContentsDataType>(CONTENTS);
+  const contents = [...stateItems];
 
   function onDragEnd(result:any) {
     // dropped outside the list
@@ -41,7 +44,7 @@ function App() {
       const sourceSubItems = itemSubItemMap[sourceParentId];
       const destSubItems = itemSubItemMap[destParentId];
 
-      let newItems:ContentsDateType = [...stateItems];
+      let newItems:ContentsDataType = [...stateItems];
 
       /** In this case subItems are reOrdered inside same Parent */
       if (sourceParentId === destParentId) {
@@ -81,7 +84,7 @@ function App() {
   }
 
   const handleNewBoardSubmit = (boardName: string) =>{
-    const items:ContentsDateType = [...stateItems];
+    const items:ContentsDataType = [...stateItems];
     const aryMax = (a:number, b:number) => {
         return Math.max(a,b);
     }
@@ -146,10 +149,25 @@ function App() {
   };
 
   const handelEditBoardName = (boardId:number, boardName:string) =>{
-    console.log(boardId);
     const allBoard = [...stateItems];
     const board:BoardType = allBoard.find((item)=> item.id ===boardId)!;
     board.name = boardName;
+    setStateItems(allBoard);
+  }
+
+  const handleEditTodoTitle = (boardId:number, todoId:string, todoTitle:string) =>{
+    const allBoard = [...stateItems];
+    const board:BoardType = allBoard.find((item)=> item.id===boardId)!;
+    const todo:TodoType = board.todos!.find((item)=> item.id===todoId)!;
+    todo.title = todoTitle;
+    setStateItems(allBoard);
+  }
+
+  const handleEditTodoMemo = (boardId:number, todoId:string, todoMemo:string|undefined) =>{
+    const allBoard = [...stateItems];
+    const board:BoardType = allBoard.find((item)=> item.id===boardId)!;
+    const todo:TodoType = board.todos!.find((item)=> item.id===todoId)!;
+    todo.memo = todoMemo;
     setStateItems(allBoard);
   }
 
@@ -160,13 +178,17 @@ function App() {
       <DragDropContext
         onDragEnd={onDragEnd}
       >
-          <Boards items={stateItems}
+        <ContentsContext.Provider value={contents}>
+          <Boards
           handleNewBoardSubmit={handleNewBoardSubmit} 
           handleNewTodoSubmit={handleNewTodoSubmit}
           handelDeleteBoardSubmit={handelDeleteBoardSubmit}
           handleDeleteTodoSubmit={handleDeleteTodoSubmit}
           handelEditBoardName={handelEditBoardName}
+          handleEditTodoTitle={handleEditTodoTitle}
+          handleEditTodoMemo={handleEditTodoMemo}
           />
+          </ContentsContext.Provider>
       </DragDropContext>
       
     </div>

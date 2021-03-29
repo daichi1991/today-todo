@@ -12,7 +12,18 @@ const BoardArea = styled.div`
     margin: 0 5px;
     padding: 0 5px;
     height: auto;
+    overflow-x: auto;
     width: 300px;
+`;
+
+const BoardHeader = styled.div`
+    display: flex;
+    width: 100%;
+`;
+
+const MenuButton = styled.div`
+    margin-left:auto;
+    cursor:pointer;
 `;
 
 interface Props{
@@ -21,6 +32,8 @@ interface Props{
     handelDeleteBoardSubmit:(boardId:number)=>void;
     handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
     handelEditBoardName: (boardId:number, boardName:string) => void;
+    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
+    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
 }
 
 
@@ -55,27 +68,34 @@ export const BoardWrapper:React.FC<Props> = (props:Props) => {
 
     return(
         <BoardArea key={board.id}>
-            <ClickAwayListener onClickAway={handleBoardNameFocusAway}>
-                <div onClick={handleBoadNameFocus}>
-                {isFocusName?
-                    <input 
-                    type="text" 
-                    value={boardName} 
-                    onChange={handleEditeName} 
-                    onKeyPress={e => {if(e.key ==='Enter'){handleBoardNameFocusAway()}}} />
-                    :
-                    boardName
-                }
-                </div>
-            </ClickAwayListener>
-        <Menu onClick={handleBoardMenu} />
-
+            <BoardHeader>
+                <ClickAwayListener onClickAway={handleBoardNameFocusAway}>
+                    <div onClick={handleBoadNameFocus}>
+                    {isFocusName?
+                        <input 
+                        type="text" 
+                        value={boardName} 
+                        onChange={handleEditeName} 
+                        onKeyPress={e => {if(e.key ==='Enter'){handleBoardNameFocusAway()}}} 
+                        />
+                        :
+                        boardName
+                    }
+                    </div>
+                </ClickAwayListener>
+                <MenuButton>
+                    <Menu onClick={handleBoardMenu}/>
+                </MenuButton>
+                
+            </BoardHeader>
             <Todos
                 parentBoardId={board.id}
                 todos={board.todos}
                 type={board.id}
                 handleNewTodoSubmit={props.handleNewTodoSubmit}
                 handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
+                handleEditTodoTitle={props.handleEditTodoTitle}
+                handleEditTodoMemo={props.handleEditTodoMemo}
             />
             {boardMenuOpen&&
                 <BoardMenu

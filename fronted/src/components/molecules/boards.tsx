@@ -2,12 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components'
 import { Droppable,Draggable } from 'react-beautiful-dnd'
 import { getItemStyle, getListStyle } from './styles'
-import { ContentsDataType } from './types'
+import { ContentsDataType, BoardType } from './types'
 import { AddCircle } from '@material-ui/icons';
 import {ContentsContext} from '../../contexts';
 
-import { Todos } from './todos'
-import {BoardMenu} from './boardMenu'
+
 import { BoardWrapper } from './boardWrapper';
 
 const {useState} = React;
@@ -47,28 +46,11 @@ const AddBoard = styled.div`
 const OpenBoardMenu = styled.button`
 `;
 
-interface Props{
-    handleNewBoardSubmit: (boardName:string) => void;
-    handleNewTodoSubmit: (boardId:number, todoName: string) => void;
-    handelDeleteBoardSubmit:(boardId:number)=>void;
-    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
-    handelEditBoardName: (boardId:number, boardName:string) => void;
-    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
-    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
-};
 
-export const Boards:React.FC<Props> = (props: Props) =>{
-    const contents = React.useContext(ContentsContext);
+export const Boards:React.FC = () =>{
+    const {contentsState, setContents} = React.useContext(ContentsContext);
     const [addForm, setAddform] = useState(false);
     const [newBoardName, setNewBoardName] = useState('');
-    const [addTodoForm, setAddTodoform] = useState<boolean>(false);
-    const [newTodoName, setNewTodoName] = useState<string>('');
-
-    const [boardMenuOpen, setBoardMenuOpen] = useState<boolean>(false);
-
-    const handelBoardMenu = () =>{
-        setBoardMenuOpen(!boardMenuOpen);
-    };
 
     const openAddform = () => {
         setAddform(!addForm);
@@ -77,11 +59,28 @@ export const Boards:React.FC<Props> = (props: Props) =>{
     const handleNewBoardName = (event:React.ChangeEvent<HTMLInputElement>) =>{
         setNewBoardName(event.target.value)
     };
-    
-    const handleNewBoardSubmit = (newBoardName: string) =>{
+
+    const handleNewBoard = (boardName: string) => {
+        console.log('handleNewBoard!!!')
         setAddform(false);
-        setNewBoardName('')
-        props.handleNewBoardSubmit(newBoardName);
+        setNewBoardName('');
+        const items:ContentsDataType = [...contentsState];
+        const aryMax = (a:number, b:number) => {
+            return Math.max(a,b);
+        }
+        const ary = items.map(item => item.id)
+        const max:number = ary.length>0?ary.reduce(aryMax)+1:1;
+        const name:string = boardName;
+    
+        const newBoard:BoardType =  {
+            id:max, 
+            name:name,
+            todos:[],
+        }
+    
+        const updatedBoard = [...contentsState,newBoard];
+    
+        setContents(updatedBoard);
     }
 
 
@@ -94,7 +93,7 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                         ref={provided.innerRef}   
                         style={getListStyle(snapshot.isDraggingOver)}                 
                     >                        
-                        {contents.map((content,index) => 
+                        {contentsState.map((content,index) => 
                             <Draggable key={content.id} draggableId={content.id.toString()} index={index} >
                                 {(provided,snapshot) =>(
                                     <div
@@ -108,12 +107,6 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                                     >
                                         <BoardWrapper 
                                             board={content}
-                                            handleNewTodoSubmit={props.handleNewTodoSubmit}
-                                            handelDeleteBoardSubmit={props.handelDeleteBoardSubmit}
-                                            handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
-                                            handelEditBoardName={props.handelEditBoardName}
-                                            handleEditTodoTitle={props.handleEditTodoTitle}
-                                            handleEditTodoMemo={props.handleEditTodoMemo}
                                         />
 
                                     </div>
@@ -132,7 +125,7 @@ export const Boards:React.FC<Props> = (props: Props) =>{
                     <label>
                         <input type="text" value={newBoardName} onChange={handleNewBoardName} placeholder="new board"/>
                     </label>
-                    <button onClick={(e) => handleNewBoardSubmit(newBoardName)} >add</button>
+                    <button onClick={(e) => handleNewBoard(newBoardName)} >add</button>
                 </AddBoard>
                 }
             </NewBoard>

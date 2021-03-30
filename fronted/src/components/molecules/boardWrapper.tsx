@@ -5,6 +5,7 @@ import {Todos} from './todos';
 import {BoardMenu} from './boardMenu';
 import { Menu } from '@material-ui/icons';
 import { ClickAwayListener } from '@material-ui/core';
+import { ContentsContext } from '../../contexts';
 
 const {useState} = React;
 
@@ -28,19 +29,13 @@ const MenuButton = styled.div`
 
 interface Props{
     board:BoardType;
-    handleNewTodoSubmit: (boardId:number, todoName: string) => void;
-    handelDeleteBoardSubmit:(boardId:number)=>void;
-    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
-    handelEditBoardName: (boardId:number, boardName:string) => void;
-    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
-    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
 }
 
 
 
 export const BoardWrapper:React.FC<Props> = (props:Props) => {
-
-    const {board, handelEditBoardName} = props
+    const {contentsState, setContents} = React.useContext(ContentsContext);
+    const {board} = props
     const [boardMenuOpen, setBoardMenuOpen] = useState<boolean>(false);
     const [boardName, setBoardName] = useState<string>(board.name);
     const [isFocusName, setIsFocusName] = useState(false);
@@ -54,6 +49,13 @@ export const BoardWrapper:React.FC<Props> = (props:Props) => {
     const handleBoardMenu = () =>{
         setBoardMenuOpen(!boardMenuOpen);
     };
+
+    const handelEditBoardName = (boardId:number, boardName:string) =>{
+        const allBoard = [...contentsState];
+        const board:BoardType = allBoard.find((item)=> item.id ===boardId)!;
+        board.name = boardName;
+        setContents(allBoard);
+    }
 
     const handleBoardNameFocusAway = () =>{
         setIsFocusName(false);
@@ -92,10 +94,6 @@ export const BoardWrapper:React.FC<Props> = (props:Props) => {
                 parentBoardId={board.id}
                 todos={board.todos}
                 type={board.id}
-                handleNewTodoSubmit={props.handleNewTodoSubmit}
-                handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
-                handleEditTodoTitle={props.handleEditTodoTitle}
-                handleEditTodoMemo={props.handleEditTodoMemo}
             />
             {boardMenuOpen&&
                 <BoardMenu
@@ -103,7 +101,6 @@ export const BoardWrapper:React.FC<Props> = (props:Props) => {
                     boardId={board.id}
                     isOpen={boardMenuOpen}
                     onClose={handleBoardMenu}
-                    handelDeleteBoardSubmit={props.handelDeleteBoardSubmit}
                 />
                     
             }

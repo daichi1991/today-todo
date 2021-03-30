@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import { AddCircle } from '@material-ui/icons'
 import {TodoWrapper} from './todoWrapper';
-import type { TodoType } from './types'
+import type { BoardType, ContentsDataType, TodoType } from './types'
 import { getSubItemStyle, getSubListStyle } from './styles'
+import { ContentsContext } from '../../contexts';
 
 const {useState} = React;
 
@@ -23,16 +24,13 @@ interface Props {
     parentBoardId:number;
     todos: TodoType[]|undefined;
     type: number;
-    handleNewTodoSubmit: (boardId:number, todoName: string) => void;
-    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
-    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
-    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
 }
 
 
 
 
 export const Todos:React.FC<Props> = (props: Props) =>{
+    const {contentsState, setContents} = React.useContext(ContentsContext);
     const [dialogOpen] = useState<boolean>(false);
     const [addForm, setAddform] = useState<boolean>(false);
     const [newTodoName, setNewTodoName] = useState<string>('');
@@ -47,10 +45,33 @@ export const Todos:React.FC<Props> = (props: Props) =>{
         setNewTodoName(event.target.value)
     };
 
-    const handleNewTodoSubmit = (boardId:number, todoName: string) => {
+    const handleNewTodo = (boardId:number, todoName: string) => {
         setNewTodoName('');
         setAddform(false);
-        props.handleNewTodoSubmit(boardId, todoName)
+        console.log(contentsState);
+        const allBoard:ContentsDataType = [...contentsState];
+        const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
+        const todos:TodoType[]|undefined = board.todos? board.todos.filter((item) => item !== undefined):undefined;
+    
+        const date = new Date();
+        const todoId = date.toISOString() + todoName;
+    
+        let newTodo:TodoType =  {
+            id:todoId, 
+            title: todoName,
+    
+        }
+
+        if(todos){
+            todos.push(newTodo);
+        }
+
+        const newTodoList = todos?todos: [newTodo];
+        board.todos = newTodoList;
+
+        setContents(allBoard);
+
+
     }
 
     return(
@@ -81,9 +102,6 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                                                 todo={todo}
                                                 isOpen={dialogOpen}
                                                 onClose={() =>{}}
-                                                handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
-                                                handleEditTodoTitle={props.handleEditTodoTitle}
-                                                handleEditTodoMemo={props.handleEditTodoMemo}
                                             />
                                         </div>
                                         
@@ -101,7 +119,7 @@ export const Todos:React.FC<Props> = (props: Props) =>{
                 {addForm && 
                 <AddTodo >
                         <input type="text" value={newTodoName} onChange={handleNewTodoName} placeholder="new todo"/>
-                    <button onClick={(e) => handleNewTodoSubmit(props.parentBoardId, newTodoName)} >add</button>
+                    <button onClick={(e) => handleNewTodo(props.parentBoardId, newTodoName)} >add</button>
                 </AddTodo>
                 }
             </NewTodo>

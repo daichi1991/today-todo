@@ -1,11 +1,21 @@
 import * as React from 'react';
 import { CONTENTS } from './components/molecules/contentsData';
-import {BoardType, TodoType} from './components/molecules/types'
+import {ContentsDataType, BoardType, TodoType} from './components/molecules/types'
 
 const {useState} = React;
 
-export const ContentsContext = React.createContext(CONTENTS);
+export const ContentsContext = React.createContext({} as {
+    contentsState:ContentsDataType,
+    setContents:React.Dispatch<React.SetStateAction<ContentsDataType>>
+});
+export const ContentsProvider = ContentsContext.Provider;
 
-export const handleEditTodoMemoContext = React.createContext(
-    {handleEdit:(boardId:number, todoId:string, todoMemo:string|undefined) =>{}}
-);
+export const Provider:React.FC = ({children}) =>{
+    const [contentsState, setContents] = useState<ContentsDataType>(CONTENTS);
+
+    return (
+        <ContentsContext.Provider value={{ contentsState, setContents }} >
+            {children}
+        </ContentsContext.Provider>
+    )
+}

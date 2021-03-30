@@ -17,9 +17,6 @@ interface Props{
     todo:TodoType;
     isOpen:boolean;
     onClose:()=> void;
-    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
-    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
-    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
 }
 
 export const TodoWrapper:React.FC<Props> = (props) =>{
@@ -41,9 +38,6 @@ export const TodoWrapper:React.FC<Props> = (props) =>{
                     todo={todo}
                     isOpen={dialogOpen}
                     onClose={handleClick}
-                    handleDeleteTodoSubmit={props.handleDeleteTodoSubmit}
-                    handleEditTodoTitle={props.handleEditTodoTitle}
-                    handleEditTodoMemo={props.handleEditTodoMemo}
                 />
             }
         </>

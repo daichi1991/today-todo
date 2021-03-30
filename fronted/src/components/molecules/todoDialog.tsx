@@ -2,7 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import {DialogContent, Dialog, DialogTitle, ClickAwayListener} from '@material-ui/core';
 import { Delete }from '@material-ui/icons'
-import {TodoType} from './types';
+import {BoardType, TodoType} from './types';
+import { ContentsContext } from '../../contexts';
 
 const {useState} = React;
 
@@ -35,25 +36,39 @@ interface Props{
     todo:TodoType;
     isOpen:boolean;
     onClose:()=> void;
-    handleDeleteTodoSubmit: (boardId:number, todoId: string) => void;
-    handleEditTodoTitle: (boardId:number, todoId:string, todoTitle:string) => void;
-    handleEditTodoMemo: (boardId:number, todoId:string, todoMemo:string|undefined) => void;
 }
 
 export const TodoDialog:React.FC<Props> = (props) => {
-    const {boardId, todo, isOpen, onClose, handleEditTodoTitle, handleEditTodoMemo} = props;
-    const [isFocusName, setIsFocusName] = useState(false);
+    const {contentsState, setContents} = React.useContext(ContentsContext);
+    const {boardId, todo, isOpen, onClose} = props;
+    const [isFocusTitle, setIsFocusTitle] = useState(false);
     const [todoTitle, setTodoTitle] = useState<string>(todo.title);
 
     const [todoMemo, setTodoMemo] = useState<string|undefined>(todo.memo);
     const [isFocusMemo, setIsFocusMemo] = useState(false);
 
-    const deleteTodo = (boardId:number, todoId: string) =>{
-        window.confirm('are you sure?')&&props.handleDeleteTodoSubmit(boardId, todoId);
+
+    const handleDeleteTodo = (boardId:number, todoId: string) =>{
+        if(window.confirm('are you sure?')){
+            const allBoard = [...contentsState];
+            const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
+            const targetIndex = board.todos!.findIndex(({id}) => id===todoId );
+            board.todos!.splice(targetIndex,1);
+        
+            setContents(allBoard);
+        }
+    }
+
+    const handleEditTodoTitle = (boardId:number, todoId:string, todoTitle:string) =>{
+        const allBoard = [...contentsState];
+        const board:BoardType = allBoard.find((item)=> item.id===boardId)!;
+        const todo:TodoType = board.todos!.find((item)=> item.id===todoId)!;
+        todo.title = todoTitle;
+        setContents(allBoard);
     }
 
     const handleTodoNameFocusAway = () =>{
-        setIsFocusName(false);
+        setIsFocusTitle(false);
         if(todo.title !== todoTitle){
             handleEditTodoTitle(boardId, todo.id, todoTitle);
         }
@@ -64,7 +79,15 @@ export const TodoDialog:React.FC<Props> = (props) => {
     };
 
     const handleTitleFocus = () =>{
-        setIsFocusMemo(true);
+        setIsFocusTitle(true);
+    }
+
+    const handleEditTodoMemo = (boardId:number, todoId:string, todoMemo:string|undefined)=>{
+        const allBoard = [...contentsState];
+        const board:BoardType = allBoard.find((item)=> item.id===boardId)!;
+        const todo:TodoType = board.todos!.find((item)=> item.id===todoId)!;
+        todo.memo = todoMemo;
+        setContents(allBoard);
     }
 
     const handleTodoMemoFocusAway = () =>{
@@ -78,6 +101,10 @@ export const TodoDialog:React.FC<Props> = (props) => {
         setTodoMemo(event.target.value)
     };
 
+    const handleMemoFocus = () =>{
+        setIsFocusMemo(true);
+    }
+
     return(
             <Dialog 
                 open={isOpen}
@@ -89,7 +116,7 @@ export const TodoDialog:React.FC<Props> = (props) => {
                             <div>
                                 <ClickAwayListener onClickAway={handleTodoNameFocusAway}>
                                     <div onClick={handleTitleFocus}>
-                                        {isFocusName?
+                                        {isFocusTitle?
                                             <input 
                                                 type="text" 
                                                 value={todoTitle}
@@ -103,12 +130,12 @@ export const TodoDialog:React.FC<Props> = (props) => {
                             </div>
                         </DialogTitle>
                         <DeleteTodo>
-                            <Delete onClick={(e) =>deleteTodo(boardId,todo.id)}/>
+                            <Delete onClick={(e) =>handleDeleteTodo(boardId,todo.id)}/>
                         </DeleteTodo>
                     </TodoHeader>
                     <DialogContent>
                         <ClickAwayListener onClickAway={handleTodoMemoFocusAway}>
-                            <div onClick={handleTitleFocus}>
+                            <div onClick={handleMemoFocus}>
                                 {isFocusMemo?
                                     <EditMemoArea
                                         value={todoMemo}

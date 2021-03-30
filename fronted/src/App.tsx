@@ -3,9 +3,11 @@ import './App.css';
 import { DragDropContext} from 'react-beautiful-dnd';
 import { Header } from './components/molecules/header';
 import { Boards } from './components/molecules/boards';
+import {Provider} from './contexts';
 import { CONTENTS } from './components/molecules/contentsData';
 import {ContentsDataType ,TodoType, BoardType} from './components/molecules/types';
 import {ContentsContext} from './contexts'
+import {Container} from './components/molecules/container'
 
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
@@ -18,8 +20,7 @@ const reorder:any = (list: any, startIndex: number, endIndex: number) => {
 
 function App() {
 
-  const [stateItems, setStateItems] = useState<ContentsDataType>(CONTENTS);
-  const contents = [...stateItems];
+  const {contentsState, setContents} = React.useContext(ContentsContext);
 
   function onDragEnd(result:any) {
     // dropped outside the list
@@ -29,11 +30,11 @@ function App() {
     const sourceIndex = result.source.index;
     const destIndex = result.destination.index;
     if (result.type === "droppableItem") {
-      const items:any = reorder(stateItems, sourceIndex, destIndex);
+      const items:any = reorder(contentsState, sourceIndex, destIndex);
 
-      setStateItems(items);
+      setContents(items);
     } else if (result.type === "droppableSubItem") {
-      const itemSubItemMap = stateItems.reduce((acc: any, item: any) => {
+      const itemSubItemMap = contentsState.reduce((acc: any, item: any) => {
         acc[item.id] = item.todos;
         return acc;
       }, {});
@@ -44,7 +45,7 @@ function App() {
       const sourceSubItems = itemSubItemMap[sourceParentId];
       const destSubItems = itemSubItemMap[destParentId];
 
-      let newItems:ContentsDataType = [...stateItems];
+      let newItems:ContentsDataType = [...contentsState];
 
       /** In this case subItems are reOrdered inside same Parent */
       if (sourceParentId === destParentId) {
@@ -59,7 +60,7 @@ function App() {
           }
           return item;
         });
-        setStateItems(newItems);
+        setContents(newItems);
       } else {
         let newSourceSubItems:TodoType[] = [...sourceSubItems];
         const [draggedItem] = newSourceSubItems.splice(sourceIndex, 1);
@@ -74,7 +75,7 @@ function App() {
           }
           return item;
         });
-        setStateItems(newItems);
+        setContents(newItems);
 
         
         
@@ -83,113 +84,12 @@ function App() {
     }
   }
 
-  const handleNewBoardSubmit = (boardName: string) =>{
-    const items:ContentsDataType = [...stateItems];
-    const aryMax = (a:number, b:number) => {
-        return Math.max(a,b);
-    }
-    const ary = items.map(item => item.id)
-    const max:number = ary.length>0?ary.reduce(aryMax)+1:1;
-    const name:string = boardName;
-
-    const newBoard:BoardType =  {
-        id:max, 
-        name:name,
-        todos:[],
-      }
-
-    const updatedBoard = [...stateItems,newBoard];
-
-    setStateItems(updatedBoard);
-
-  };
-
-  const handleNewTodoSubmit = (boardId:number, todoName: string) =>{
-    const allBoard = [...stateItems];
-    const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
-    const todos:TodoType[]|undefined = board.todos? board.todos.filter((item) => item !== undefined):undefined;
-
-    const date = new Date();
-    const todoId = date.toISOString() + todoName;
-
-    let newTodo:TodoType =  {
-        id:todoId, 
-        title: todoName,
-
-      }
-
-    if(todos){
-      todos.push(newTodo);
-    }
-
-    const newTodoList = todos?todos: [newTodo];
-    board.todos = newTodoList;
-
-    setStateItems(allBoard);
-
-  };
-
-  const handelDeleteBoardSubmit = (boardId:number) =>{
-    const allBoard =[...stateItems];
-    const targetIndex:number = allBoard.findIndex(({id}) => id ===boardId);
-    allBoard.splice(targetIndex,1);
-
-    setStateItems(allBoard);
-
-  }
-
-  const handleDeleteTodoSubmit = (boardId:number, todoId: string) =>{
-    const allBoard = [...stateItems];
-    const board:BoardType = allBoard.find((item)=> item.id === boardId)!;
-    const targetIndex = board.todos!.findIndex(({id}) => id===todoId );
-    board.todos!.splice(targetIndex,1);
-
-
-    setStateItems(allBoard);
-  };
-
-  const handelEditBoardName = (boardId:number, boardName:string) =>{
-    const allBoard = [...stateItems];
-    const board:BoardType = allBoard.find((item)=> item.id ===boardId)!;
-    board.name = boardName;
-    setStateItems(allBoard);
-  }
-
-  const handleEditTodoTitle = (boardId:number, todoId:string, todoTitle:string) =>{
-    const allBoard = [...stateItems];
-    const board:BoardType = allBoard.find((item)=> item.id===boardId)!;
-    const todo:TodoType = board.todos!.find((item)=> item.id===todoId)!;
-    todo.title = todoTitle;
-    setStateItems(allBoard);
-  }
-
-  const handleEditTodoMemo = (boardId:number, todoId:string, todoMemo:string|undefined) =>{
-    const allBoard = [...stateItems];
-    const board:BoardType = allBoard.find((item)=> item.id===boardId)!;
-    const todo:TodoType = board.todos!.find((item)=> item.id===todoId)!;
-    todo.memo = todoMemo;
-    setStateItems(allBoard);
-  }
-
 
   return (
     <div className="App">
-      <Header title="today-todo!" />
-      <DragDropContext
-        onDragEnd={onDragEnd}
-      >
-        <ContentsContext.Provider value={contents}>
-          <Boards
-          handleNewBoardSubmit={handleNewBoardSubmit} 
-          handleNewTodoSubmit={handleNewTodoSubmit}
-          handelDeleteBoardSubmit={handelDeleteBoardSubmit}
-          handleDeleteTodoSubmit={handleDeleteTodoSubmit}
-          handelEditBoardName={handelEditBoardName}
-          handleEditTodoTitle={handleEditTodoTitle}
-          handleEditTodoMemo={handleEditTodoMemo}
-          />
-          </ContentsContext.Provider>
-      </DragDropContext>
+        <Provider>
+          <Container />
+        </Provider>
       
     </div>
   );

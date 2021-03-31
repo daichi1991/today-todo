@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 2021_03_07_082845) do
   end
 
   create_table "todos", force: :cascade do |t|
-    t.integer "user_id", null: false
     t.integer "board_id", null: false
     t.string "title", null: false
     t.text "memo"
@@ -31,7 +30,6 @@ ActiveRecord::Schema.define(version: 2021_03_07_082845) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["board_id"], name: "index_todos_on_board_id"
-    t.index ["user_id"], name: "index_todos_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,5 +41,4 @@ ActiveRecord::Schema.define(version: 2021_03_07_082845) do
 
   add_foreign_key "boards", "users"
   add_foreign_key "todos", "boards"
-  add_foreign_key "todos", "users"
 end

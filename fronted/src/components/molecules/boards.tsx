@@ -21,16 +21,8 @@ const AllBoard = styled.div`
     height:auto;
 `;
 
-const BoardArea = styled.div`
-    margin: 0 5px;
-    padding: 0 5px;
-    height: auto;
-    width: 300px;
-`;
 
-const BoardName = styled.p`
-    font-size:16px;
-`;
+
 
 const NewBoard = styled.div`
     display:block;
@@ -41,9 +33,6 @@ const NewBoard = styled.div`
 
 const AddBoard = styled.div`
 
-`;
-
-const OpenBoardMenu = styled.button`
 `;
 
 

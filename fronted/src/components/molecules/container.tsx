@@ -3,7 +3,7 @@ import { DragDropContext} from 'react-beautiful-dnd';
 import { Header } from '../molecules/header';
 import { Boards } from '../molecules/boards';
 import {ContentsContext} from '../../contexts';
-import {ContentsDataType ,TodoType, BoardType} from '../molecules/types';
+import {ContentsDataType ,TodoType} from '../molecules/types';
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
     const result = Array.from(list);

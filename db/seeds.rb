@@ -9,18 +9,20 @@
     user = User.new(
         name:"testユーザー_#{n}",
         email:"test-#{n}@testmail.com",
-    )
-    user.boards.build(
-        name:"ToDo",
-        position: 1,
-    )
-    user.boards.build(
-        name:"Doing",
-        position: 2,
-    )
-    user.boards.build(
-        name:"Done",
-        position: 3,
+        boards_attributes:[
+            {
+                name:"Todo",
+                position:1,
+                todos_attributes:[
+                    {
+                        title: "起床",
+                        memo: "",
+                        active: true,
+                        position: 1,
+                    }
+                ]
+            }
+        ]
     )
 
     user.save!

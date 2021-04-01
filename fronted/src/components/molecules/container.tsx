@@ -4,6 +4,9 @@ import { Header } from '../molecules/header';
 import { Boards } from '../molecules/boards';
 import {ContentsContext} from '../../contexts';
 import {ContentsDataType ,TodoType} from '../molecules/types';
+import {fetchContents} from '../../Api'
+
+const {useEffect} = React;
 
 const reorder:any = (list: any, startIndex: number, endIndex: number) => {
     const result = Array.from(list);
@@ -78,6 +81,8 @@ export const Container: React.FC = () =>{
     
     }
     }
+
+
 
 
     return(

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { CONTENTS } from './components/molecules/contentsData';
-import {ContentsDataType, BoardType, TodoType} from './components/molecules/types'
+import {ContentsDataType} from './components/molecules/types'
+import {fetchContents} from './Api'
 
-const {useState} = React;
+const {useState, useEffect} = React;
 
 export const ContentsContext = React.createContext({} as {
     contentsState:ContentsDataType,
@@ -11,7 +12,18 @@ export const ContentsContext = React.createContext({} as {
 export const ContentsProvider = ContentsContext.Provider;
 
 export const Provider:React.FC = ({children}) =>{
-    const [contentsState, setContents] = useState<ContentsDataType>(CONTENTS);
+
+
+
+    const [contentsState, setContents] = useState<ContentsDataType>([]);
+
+    useEffect(() => {
+        fetchContents()
+        .then((data:ContentsDataType)=>
+            setContents(data)
+        )
+    }, [])
+
 
     return (
         <ContentsContext.Provider value={{ contentsState, setContents }} >

@@ -4,21 +4,11 @@ import {ContentsDataType} from './components/molecules/types'
 type jsonType = ContentsDataType;
 
 
-export const getContents = (URL:string):jsonType =>{
+export const fetchContents = () =>{
 
-    let return_Json:jsonType = [];
-
-    axios
-        .get<jsonType>(URL)
-        .then((results)=>{
-            return_Json = results.data;
-            console.log(results.data);
-            return return_Json;
-        })
-        .catch((error)=>{
-            console.log('通信失敗');
-            console.log(error.status);
-        });
-
-        return return_Json
+    return axios.get('http://localhost:3000/api/v1/users/1/boards.json')
+    .then(res => {
+        return res.data
+    })
+    .catch((e) => console.error(e))
 };

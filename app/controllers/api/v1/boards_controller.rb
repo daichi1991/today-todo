@@ -3,13 +3,8 @@ module Api
         class BoardsController < ApplicationController
             def index
                 user = User.find(params[:user_id])
-                boards = user.boards
-                todos = boards.find(1).todos
-
-                render json: {
-                    boards: boards,
-                    todos: todos,
-                },status: :ok
+                @boards = user.boards
+                render :index
             end
         end
     end

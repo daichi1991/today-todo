@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components'
 import { Droppable,Draggable } from 'react-beautiful-dnd'
 import { getItemStyle, getListStyle } from './styles'
+import {postBoard} from '../../apis/board'
 import { ContentsDataType, BoardType } from './types'
 import { AddCircle } from '@material-ui/icons';
 import {ContentsContext} from '../../contexts';
@@ -70,6 +71,7 @@ export const Boards:React.FC = () =>{
         const updatedBoard = [...contentsState,newBoard];
     
         setContents(updatedBoard);
+        postBoard(boardName, max);
     }
 
 

@@ -5,9 +5,7 @@ module Api
                 @todo = Todo.new(user_id: params[:user_id], board_id: params[:board_id], title: params[:title], memo: params[:text])
                 
                 if @todo.save
-                    render json: {
-                        todo: @todo
-                    },status: :created
+                    render :create
                 else
                     render json:{}, status: :internal_server_error
                 end

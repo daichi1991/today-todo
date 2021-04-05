@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { CONTENTS } from './components/molecules/contentsData';
 import {ContentsDataType} from './components/molecules/types'
-import {fetchContents} from './Api'
+import {fetchContents} from './apis/board'
 
 const {useState, useEffect} = React;
 

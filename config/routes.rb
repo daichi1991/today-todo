@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users do
         resources :boards do
-          resources :todo
+          resources :todos
         end
       end
     end

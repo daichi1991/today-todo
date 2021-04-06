@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import { AddCircle } from '@material-ui/icons'
+import {postTodo} from '../../apis/todos'
 import {TodoWrapper} from './todoWrapper';
 import type { BoardType, ContentsDataType, TodoType } from './types'
 import { getSubItemStyle, getSubListStyle } from './styles'
@@ -69,8 +70,11 @@ export const Todos:React.FC<Props> = (props: Props) =>{
         const newTodoList = todos?todos: [newTodo];
         board.todos = newTodoList;
 
-        setContents(allBoard);
+        const newTodoPos:number = board.todos.length;
+        const boardIdStr:string = boardId.toString();
 
+        setContents(allBoard);
+        postTodo(boardIdStr, todoName, '', true, newTodoPos);
 
     }
 
